@@ -10,8 +10,12 @@
 	<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Work+Sans&display=swap"
 		rel="stylesheet">
 	<meta name="description" content="">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+		integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+		crossorigin="anonymous" referrerpolicy="no-referrer" />
 	<link rel="stylesheet" href="./assets/style.css">
 	<script type="module" src="./Controller/index.js" defer></script>
+	<script type="module" src="./Controller/modal.js" defer></script>
 </head>
 
 <body>
@@ -22,7 +26,7 @@
 				<li>projets</li>
 				<li>contact</li>
 				<li><a href="./login.html" id="loginId">login</a></li>
-				<li><a href="">logout</a></li>
+				<li><a href="./login.html" id="logoutId" class="hidden">logout</a></li>
 				<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
 			</ul>
 		</nav>
@@ -45,9 +49,62 @@
 			</article>
 		</section>
 
-		<section id="portfolio">
-			<h2>Mes Projets</h2>
+		<div class="overlay hidden">
+			<div class="modal">
+				<section class="gallery-photo">
+					<header class="modalHeader">
+						<h3>Galerie photo</h3>
+						<button id="close" class="close">
+							<i class="fa-solid fa-xmark"></i>
+						</button>
+					</header>
+					<div class="edit-gallery"></div>
+					<hr>
+					<footer>
+						<button id="add" class="ajouter-une-photo">Ajouter une photo</button>
+					</footer>
+				</section>
+				<section class="ajouter-photo hidden">
+					<header>
+						<button id="back" class="back">
+							<i class="fa-solid fa-arrow-left"></i>
+						</button>
+						<h3>Ajout photo</h3>
+						<button id="close-2" class="close">
+							<i class="fa-solid fa-xmark"></i>
+						</button>
+					</header>
+					<div class="plus">
+						<i class="fa-regular fa-image"></i>
+						<button>+ Ajouter photo</button>
+						<h4>jpg, png : 4mo max</h4>
+					</div>
+					<form class="input" action="">
+						<label for="titre">Titre:</label><br>
+						<input type="text" id="titre" name="titre"><br><br>
 
+						<label for="categorie">Catégorie:</label><br>
+						<select name="categorie" id="categorie">
+							<option value="empty"></option>
+							<option value="Objets">Objets</option>
+							<option value="Appartements">Appartements</option>
+							<option value="Hotels & restaurants">Hotels & restaurants</option>
+						</select>
+					</form>
+					<hr>
+					<button class="valider">Valider</button>
+				</section>
+			</div>
+		</div>
+
+		<section id="portfolio">
+			<header>
+				<h2>Mes Projets</h2>
+				<button id="edit">
+					<i class="fa-regular fa-pen-to-square"></i>
+					modifier
+				</button>
+			</header>
 			<div class="filter">
 				<!-- <button class="active" data-name="Tous">Tous</button>
 				<button data-name="Objet">Objet</button>
