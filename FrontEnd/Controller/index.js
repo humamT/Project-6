@@ -82,7 +82,9 @@ function createWorkElement(work) {
 function displayWorks(works) {
     let worksElement = works.map(createWorkElement)
     galleryContainer.innerHTML = ""
+    let i = 0
     worksElement.forEach((work) => {
+        console.log(i++)
         galleryContainer.appendChild(work)
     })
 }

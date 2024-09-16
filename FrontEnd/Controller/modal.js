@@ -1,33 +1,30 @@
-import {
-    fetchWorks, addWork, deleteWork
-} from "../Model/works.js"
+import { fetchWorks, addWork, deleteWork } from "../Model/works.js";
 
+// To create the edit gallery modal //
 
-// to create the edit gallery modal //
-
-const editGalleryContainer = document.querySelector(".edit-gallery");  // Edit gallery container
+const editGalleryContainer = document.querySelector(".edit-gallery"); // Edit gallery container
 
 function createWorkElement(work) {
-    let figure = document.createElement("figure")
-    let img = document.createElement("img")
-    let button = document.createElement('button')
-    button.classList.add('trash-icon')
-    let i = document.createElement('i')
-    i.classList.add('fa-solid', 'fa-trash-can')
-    button.addEventListener('click', handleRemove(work.id))
-    img.src = work.imageUrl
-    figure.appendChild(img)
-    figure.appendChild(button)
-    button.appendChild(i)
-    return figure
+    let figure = document.createElement("figure");
+    let img = document.createElement("img");
+    let button = document.createElement('button');
+    button.classList.add('trash-icon');
+    let i = document.createElement('i');
+    i.classList.add('fa-solid', 'fa-trash-can');
+    button.addEventListener('click', handleRemove(work.id));
+    img.src = work.imageUrl;
+    figure.appendChild(img);
+    figure.appendChild(button);
+    button.appendChild(i);
+    return figure;
 }
 
 function displayWorks(works) {
-    let worksElement = works.map(createWorkElement)
-    editGalleryContainer.innerHTML = ""
+    let worksElement = works.map(createWorkElement);
+    editGalleryContainer.innerHTML = "";
     worksElement.forEach((work) => {
-        editGalleryContainer.appendChild(work)
-    })
+        editGalleryContainer.appendChild(work);
+    });
 }
 
 async function initWorks() {
@@ -36,124 +33,148 @@ async function initWorks() {
         console.error("Failed to fetch images");
         return;
     }
-    displayWorks(document.works)
+    displayWorks(document.works);
 }
 
-initWorks()
+initWorks();
 
-// to swicth between the two modals or close them //
+// To switch between the two modals or close them //
 
 const initModalForm = function () {
-    const editButton = document.getElementById("edit")
-    const modalOverlay = document.querySelector(".overlay")
-    editButton.addEventListener("click", function (event) {
-        modalOverlay.classList.remove("hidden")
-        addOverlay.classList.add("hidden")
-        galleryOverlay.classList.remove("hidden")
-    })
+    const editButton = document.getElementById("edit");
+    const modalOverlay = document.querySelector(".overlay");
+    const addOverlay = document.querySelector(".ajouter-photo");
+    const galleryOverlay = document.querySelector(".gallery-photo");
+
+    editButton.addEventListener("click", function () {
+        modalOverlay.classList.remove("hidden");
+        addOverlay.classList.add("hidden");
+        galleryOverlay.classList.remove("hidden");
+    });
 
     const closeButton = document.getElementById("close");
     const closeButton2 = document.getElementById("close-2");
-    closeButton.addEventListener("click", function (event) {
+    closeButton.addEventListener("click", function () {
         modalOverlay.classList.add("hidden");
     });
-    closeButton2.addEventListener("click", function (event) {
+    closeButton2.addEventListener("click", function () {
         modalOverlay.classList.add("hidden");
     });
 
-    const addButton = document.getElementById("add")
-    const addOverlay = document.querySelector(".ajouter-photo")
-    const galleryOverlay = document.querySelector(".gallery-photo")
-    addButton.addEventListener("click", function (event) {
-        addOverlay.classList.remove("hidden")
-        galleryOverlay.classList.add("hidden")
-    })
+    const addButton = document.getElementById("add");
+    addButton.addEventListener("click", function () {
+        addOverlay.classList.remove("hidden");
+        galleryOverlay.classList.add("hidden");
+    });
 
-    const backButton = document.getElementById("back")
-    backButton.addEventListener("click", function (event) {
-        addOverlay.classList.add("hidden")
-        galleryOverlay.classList.remove("hidden")
-    })
+    const backButton = document.getElementById("back");
+    backButton.addEventListener("click", function () {
+        addOverlay.classList.add("hidden");
+        galleryOverlay.classList.remove("hidden");
+    });
 
-}
-
+    const token = localStorage.getItem('token');
+    console.log('Token:', token); // Check if the token is being retrieved correctly
+};
 
 initModalForm();
 
-// to add the delete trash can and delete works//
+// To add the delete works //
 
 function handleRemove(workId) {
     return async function (event) {
-        event.preventDefault()
+        event.preventDefault();
         try {
-            await deleteWork(workId)
-            document.works = document.works.filter((work) => {
-                if (work.id === workId) {
-                    return false
-                } else {
-                    return true
-                }
-            })
-            initModalForm()
-            displayWorks(document.works)
+            await deleteWork(workId);
+            document.works = document.works.filter((work) => work.id !== workId);
+            displayWorks(document.works);
+        } catch (error) {
+            console.log(error);
         }
-        catch (error) {
-            console.log(error)
+    };
+}
+
+// To upload an image //
+
+const titleInput = document.getElementById('titre');
+const categorySelect = document.getElementById('categorie');
+
+document.addEventListener("DOMContentLoaded", () => {
+    const inputElement = document.getElementById("inputFile");
+    const preview = document.getElementById("preview");
+    const imgIcon = document.querySelector(".imgIcon");
+    const fileName = document.getElementById("fileName");
+    const max = document.getElementById("max");
+    const addWorkBtn = document.getElementById('add-photo');
+
+    inputElement.addEventListener("change", handleFiles, false);
+
+    function handleFiles(event) {
+        const files = event.target.files;
+
+        // Clear the preview container before adding new images
+        preview.innerHTML = '';
+
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+
+            if (!file.type.startsWith("image/")) {
+                continue; // Skip non-image files
+            }
+
+            const img = document.createElement("img");
+            img.classList.add("obj");
+            img.file = file;
+            preview.appendChild(img); // Add the image to the preview container
+
+            imgIcon.classList.add("hidden");
+            fileName.classList.add("hidden");
+            max.classList.add("hidden");
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                img.src = e.target.result; // Set the src of the img element to the file data
+            };
+            reader.readAsDataURL(file);
         }
     }
-}
 
-// to upload an image//
+    function validModalForm() {
+        const titleContent = titleInput.value.trim();
+        const selectedCategory = Number(categorySelect.value);
 
+        return inputElement.files.length > 0 && titleContent.length > 0 && selectedCategory !== 'empty';
+    }
 
+    addWorkBtn.addEventListener('click', async (event) => {
+        event.preventDefault();
 
-const uploadButton = document.querySelector(".plus button"); // Button to trigger file upload
-const inputForm = document.querySelector(".input"); // Input form
-const validerButton = document.querySelector(".valider"); // Submit button
-const titleInput = document.getElementById("titre"); // Title input field
-const categorySelect = document.getElementById("categorie"); // Category select input
+        if (validModalForm()) {
+            try {
+                const selectedImg = inputElement.files[0];
+                const titleContent = titleInput.value.trim();
+                const selectedCategory = categorySelect.value;
 
-/*
-function addTrashIcon(clonedImageElement, originalImageElement) {
-    // Create the trash can icon element using FontAwesome
-    const trashIcon = document.createElement('i');
-    trashIcon.className = 'fa-solid fa-trash-can trash-icon';
+                console.log(titleContent, selectedImg, selectedCategory);
 
-    // Set the position style of the cloned image element to relative to ensure absolute positioning works
-    clonedImageElement.style.position = 'relative';
+                // Send the data to the server
+                let result = await addWork(document.getElementById("inputFile").files[0], titleContent, selectedCategory);
+                alert(typeof result)
 
-    // Append the trash icon to the cloned image element
-    clonedImageElement.appendChild(trashIcon);
+                // Assuming document.works is where the works are stored
+                document.works.push(result);
 
-    // Add click event to remove both the cloned and original image elements
-    trashIcon.addEventListener('click', () => {
-        clonedImageElement.remove(); // Remove from cloned gallery
-        originalImageElement.remove(); // Remove from original gallery
+                // Update the works display
+                displayWorks(document.works);
+
+                // Close the modal
+                closeModal();
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        } else {
+            alert('Veuillez remplir tous les champs !');
+        }
     });
-}
+});
 
-/**
- * Reuse createImageElement function from index.js
- * Function to create an image element for the gallery.
- * @param {Object} imageData - The data for the image.
- * @returns {HTMLElement} The created image element.
- 
-
-function createImageElement(imageData) {
-    const figure = document.createElement("figure");
-    figure.classList.add("gallery-item");
-    figure.setAttribute("data-id", imageData.categoryId);
-
-    const img = document.createElement("img");
-    img.src = imageData.imageUrl; // Assuming imageData.imageUrl contains the image URL
-    img.alt = imageData.title || "Image"; // Optional: Adding an alt text
-
-    const figcaption = document.createElement("figcaption");
-    figcaption.innerText = imageData.title || "Caption"; // Optional: Adding a caption
-
-    figure.appendChild(img);
-    figure.appendChild(figcaption);
-
-    return figure;
-}
-*/

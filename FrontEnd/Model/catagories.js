@@ -11,4 +11,3 @@ export async function fetchCategories() {
     const data = await response.json();
     return data
 }
-// Implementation of fetchCategories if needed

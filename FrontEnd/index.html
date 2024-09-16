@@ -74,25 +74,29 @@
 							<i class="fa-solid fa-xmark"></i>
 						</button>
 					</header>
+
 					<div class="plus">
-						<i class="fa-regular fa-image"></i>
-						<button>+ Ajouter photo</button>
-						<h4>jpg, png : 4mo max</h4>
+						<i class="fa-regular fa-image imgIcon"></i>
+						<label id="fileName" for="inputFile">+ Ajouter photo</label>
+						<input accept="image/*" type="file" name="Ajouter photo" id="inputFile">
+						<h4 id="max">jpg, png : 4mo max</h4>
+						<div id="preview" class="preview"></div> <!-- Add this div for image preview -->
 					</div>
+
 					<form class="input" action="">
 						<label for="titre">Titre:</label><br>
 						<input type="text" id="titre" name="titre"><br><br>
 
 						<label for="categorie">Catégorie:</label><br>
 						<select name="categorie" id="categorie">
-							<option value="empty"></option>
-							<option value="Objets">Objets</option>
-							<option value="Appartements">Appartements</option>
-							<option value="Hotels & restaurants">Hotels & restaurants</option>
+							<option value="0"></option>
+							<option value="1">Objets</option>
+							<option value="2">Appartements</option>
+							<option value="3">Hotels & restaurants</option>
 						</select>
 					</form>
 					<hr>
-					<button class="valider">Valider</button>
+					<button id="add-photo" class="valider">Valider</button>
 				</section>
 			</div>
 		</div>
