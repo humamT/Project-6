@@ -158,8 +158,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 console.log(titleContent, selectedImg, selectedCategory);
 
                 // Send the data to the server
-                let result = await addWork(document.getElementById("inputFile").files[0], titleContent, selectedCategory);
-                alert(typeof result)
+                let result = await addWork(selectedImg, titleContent, selectedCategory);
 
                 // Assuming document.works is where the works are stored
                 document.works.push(result);

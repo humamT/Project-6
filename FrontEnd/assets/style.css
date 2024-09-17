@@ -501,17 +501,18 @@ footer nav ul {
 }
 .plus label{
 	    display: flex;
-	    font-size: 15px;
+	    font-size: 18px;
 	    font-family: 'Work Sans';
 	    border: none;
 	    color: #306685;
 	    background: #CBD6DC;
-	    border-radius: 20px;
+	    border-radius: 25px;
 	    width: 220px;
 	    height: 40px;
 	    cursor: pointer;
 	    justify-content: center;
 	    align-items: center;
+	    padding: 14px;
 }
 
 .plus input {
