@@ -11,26 +11,7 @@ export async function fetchWorks() {
     const data = await response.json();
     return data;
 }
-/*
-export async function addWork(image, title, category) {
-    const form = new FormData()
-    form.append("title", title)
-    form.append("category", category)
-    form.append("image", image)
-    const response = await fetch("http://localhost:5678/api/works", {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: form
-    });
-    if (!response.ok) {
-        return false;
-    }
-    const data = await response.json();
-    return data;
-}
-*/
+
 export const addWork = async (image, title, category) => {
     //création d'une instance formData et de données manipulables
     const formData = new FormData();
@@ -71,15 +52,3 @@ export const deleteWork = async (_id) => {
         return true
     }
 }
-
-/*
-export async function deleteWork(id) {
-    const response = await fetch(`http://localhost:5678/api/works/${id}`, {
-        method: "delete",
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    });
-    return response.ok
-}
-*/

@@ -595,4 +595,10 @@ footer nav ul {
 	border-radius: 20px;
 	width: 240px;
 	height: 40px;
+	cursor: pointer;
+}
+
+.btn-disabled {
+	background: #A7A7A7!important;
+	color: #FFFFFF!important;
 }

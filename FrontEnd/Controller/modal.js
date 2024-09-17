@@ -146,6 +146,16 @@ document.addEventListener("DOMContentLoaded", () => {
         return inputElement.files.length > 0 && titleContent.length > 0 && selectedCategory !== 'empty';
     }
 
+    categorySelect.addEventListener('change', () => {
+        if (validModalForm()) {
+            // All conditions are met, disable the button
+            addWorkBtn.classList.remove('btn-disabled');
+        } else {
+            // One or more conditions are not met, activate the button
+            addWorkBtn.classList.add('btn-disabled');
+        }
+    });
+
     addWorkBtn.addEventListener('click', async (event) => {
         event.preventDefault();
 
