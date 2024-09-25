@@ -25,8 +25,6 @@ export const addWork = async (image, title, category) => {
     let response = await fetch('http://localhost:5678/api/works', {
         method: 'POST',
         headers: {
-            // 'Content-Type': 'application/json',
-
             //indique au serveur que le client est autorisé à acceder à la ressource demandée
             'Authorization': 'Bearer ' + token,
         },

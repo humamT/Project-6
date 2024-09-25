@@ -1,10 +1,10 @@
 import { fetchWorks, addWork, deleteWork } from "../Model/works.js";
-
+import { initWorks, displayWorks} from "../Controller/index.js"
 // To create the edit gallery modal //
 
-const editGalleryContainer = document.querySelector(".edit-gallery"); // Edit gallery container
+export const editGalleryContainer = document.querySelector(".edit-gallery"); // Edit gallery container
 
-function createWorkElement(work) {
+export function createWorkElementModal(work) {
     let figure = document.createElement("figure");
     let img = document.createElement("img");
     let button = document.createElement('button');
@@ -19,25 +19,6 @@ function createWorkElement(work) {
     return figure;
 }
 
-function displayWorks(works) {
-    let worksElement = works.map(createWorkElement);
-    editGalleryContainer.innerHTML = "";
-    worksElement.forEach((work) => {
-        editGalleryContainer.appendChild(work);
-    });
-}
-
-async function initWorks() {
-    document.works = await fetchWorks(); // Fetch works (images)
-    if (!document.works) {
-        console.error("Failed to fetch images");
-        return;
-    }
-    displayWorks(document.works);
-}
-
-initWorks();
-
 // To switch between the two modals or close them //
 
 const initModalForm = function () {
@@ -45,6 +26,11 @@ const initModalForm = function () {
     const modalOverlay = document.querySelector(".overlay");
     const addOverlay = document.querySelector(".ajouter-photo");
     const galleryOverlay = document.querySelector(".gallery-photo");
+    const backGround = document.querySelector(".background");
+
+    backGround.addEventListener("click", function () {
+        modalOverlay.classList.add("hidden");
+    })
 
     editButton.addEventListener("click", function () {
         modalOverlay.classList.remove("hidden");
@@ -117,10 +103,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
         for (let i = 0; i < files.length; i++) {
             const file = files[i];
+            var filesize = ((file.size / 1024) / 1024).toFixed(4);
+            console.log(file.type)
 
-            if (!file.type.startsWith("image/")) {
+            if (!file.type.startsWith("image/png") && !file.type.startsWith("image/jpeg")) {
+                alert('le fichier sélectionné n`est pas supporté')
                 continue; // Skip non-image files
             }
+
+            if (filesize >= 4) {
+                alert('la taille de l`image est supérieure à 4 Mo');
+                continue;
+            }
+
 
             const img = document.createElement("img");
             img.classList.add("obj");
@@ -173,11 +168,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 // Assuming document.works is where the works are stored
                 document.works.push(result);
 
-                // Update the works display
-                displayWorks(document.works);
+                //call initWorks
+                initWorks()
 
                 // Close the modal
-                closeModal();
+                const modalOverlay = document.querySelector(".overlay");
+                modalOverlay.classList.add("hidden");
+
             } catch (error) {
                 console.error('Error:', error);
             }

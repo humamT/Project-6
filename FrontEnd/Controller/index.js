@@ -7,6 +7,8 @@ import {
     fetchWorks
 } from "../Model/works.js"
 
+import { createWorkElementModal, editGalleryContainer } from "../Controller/modal.js"
+
 //// FILTERS //// 
 
 // Function to initialize filters and gallery
@@ -32,9 +34,9 @@ const initFilters = async function () {
 
     // Selecting the filter buttons and the filterable images
 
-    const filterButtons = document.querySelectorAll(".filter button");
-    filterButtons[0].classList.add("active")
-    const gallery = document.querySelectorAll(".gallery figure");
+    const filterButtons = document.querySelectorAll(".filter button"); //This will allow adding functionality to each button. 
+    filterButtons[0].classList.add("active") // indicate it is initially selected.
+    const gallery = document.querySelectorAll(".gallery figure"); // Selects all the <figure> elements inside the .gallery, which represent the works to be filtered. 
 
     // Define the filterimages function
     const filterimages = (e) => {
@@ -73,23 +75,28 @@ function createWorkElement(work) {
     let figcaption = document.createElement("figcaption")
     img.src = work.imageUrl
     img.alt = work.title
+    figcaption.textContent = work.title;
     figure.appendChild(img)
     figure.appendChild(figcaption)
-    figcaption.textContent = work.title;
     return figure
 }
 
-function displayWorks(works) {
+export function displayWorks(works) {
     let worksElement = works.map(createWorkElement)
     galleryContainer.innerHTML = ""
-    let i = 0
+   // let i = 0
     worksElement.forEach((work) => {
-        console.log(i++)
+      //  console.log(i++)
         galleryContainer.appendChild(work)
     })
+    let worksElementModal = works.map(createWorkElementModal);
+    editGalleryContainer.innerHTML = "";
+    worksElementModal.forEach((work) => {
+        editGalleryContainer.appendChild(work);
+    });
 }
 
-async function initWorks() {
+export async function initWorks() {
     document.works = await fetchWorks(); // Fetch works (images)
     if (!document.works) {
         console.error("Failed to fetch images");
@@ -107,6 +114,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const logoutLink = document.getElementById("logoutId");
     const editButton = document.getElementById("edit")
     const filter = document.querySelector(".filter")
+    const mode = document.querySelector(".mode-edition")
 
     // Check login status by checking if token is present in localStorage
     const isLoggedIn = !!localStorage.getItem("token");
@@ -117,11 +125,13 @@ document.addEventListener("DOMContentLoaded", function () {
         logoutLink.classList.remove("hidden"); // Show logout link
         editButton.classList.remove("hidden") // show the edit button
         filter.classList.add("hidden")
+        mode.classList.remove("hidden")
     } else {
         loginLink.classList.remove("hidden");   // Show login link
         logoutLink.classList.add("hidden");   // Hide logout link
         editButton.classList.add("hidden")    // hide the edit button
         filter.classList.remove("hidden")
+        mode.classList.add("hidden")
     }
 
     // Logout functionality
