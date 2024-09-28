@@ -1,5 +1,5 @@
 import { fetchWorks, addWork, deleteWork } from "../Model/works.js";
-import { initWorks, displayWorks} from "../Controller/index.js"
+import { initWorks, displayWorks } from "../Controller/index.js"
 // To create the edit gallery modal //
 
 export const editGalleryContainer = document.querySelector(".edit-gallery"); // Edit gallery container
@@ -108,12 +108,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (!file.type.startsWith("image/png") && !file.type.startsWith("image/jpeg")) {
                 alert('le fichier sélectionné n`est pas supporté')
-                continue; // Skip non-image files
+                return; // Skip non-image files
             }
 
             if (filesize >= 4) {
                 alert('la taille de l`image est supérieure à 4 Mo');
-                continue;
+                return;
             }
 
 
@@ -174,6 +174,18 @@ document.addEventListener("DOMContentLoaded", () => {
                 // Close the modal
                 const modalOverlay = document.querySelector(".overlay");
                 modalOverlay.classList.add("hidden");
+
+                //empty privew
+
+                inputElement.value = ""
+                titleInput.value = ""
+                categorySelect.value = 0
+                
+                preview.innerHTML = ""
+                imgIcon.classList.remove("hidden");
+                fileName.classList.remove("hidden");
+                max.classList.remove("hidden");
+
 
             } catch (error) {
                 console.error('Error:', error);
